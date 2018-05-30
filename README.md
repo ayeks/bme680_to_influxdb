@@ -2,6 +2,8 @@
 
 This script sends the data from the RaspberryPI Bosch BME680 module to a InfluxDB. The script itself and the documentation is work-in-progress. However, feel free to open issues for your questions and ideas.
 
+Feel free to read the full story on how to send BME680 sensor logs with a RaspberryPi to InfluxDB and into Grafana on [ayeks.de](https://ayeks.de/2018/05/bme680-influxdb-grafana/).
+
 ## Installation
 
 ### InfluxDB on a RaspberryPI
@@ -64,7 +66,9 @@ select * from dev
 
 ```
 
-Stay tuned for some fancy Grafana examples..
+In this repo is the [JSON](./grafana_dashboard.json) included that generates the following Grafana Dashboard:
+
+![Grafana BME680 Dashboard](https://ayeks.de/assets/blog/2018-05-29-bme680-influxdb-grafana/grafana-complete-bme680.png)
 
 ## Credits
 
