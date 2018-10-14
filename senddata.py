@@ -16,42 +16,45 @@ def get_raspid():
                 cpuserial = line[10:26]
     return cpuserial
 
+
+
+# Allow user to set session and runno via args otherwise auto-generate
+if len(sys.argv) is 2:
+        configpath = sys.argv[1]
+else:
+    print("ParameterError: You must define the path to the config.ini!")
+    sys.exit()
+
 # Parsing the config parameters from config.ini
 config = configparser.ConfigParser()
 try:
-    config.read('config.ini')
+    config.read(configpath)
     influxserver = config['influxserver']
     host = influxserver.get('host')
     port = influxserver.get('port')
     user = influxserver.get('user')
     password = influxserver.get('password')
     dbname = influxserver.get('dbname')
-    enable_gas = config.getboolean('sensor', 'enable_gas')
+    sensor = config['sensor']
+    enable_gas = sensor.getboolean('enable_gas')
+    session = sensor.get('session')
+    location = sensor.get('location')
+    temp_offset = float(sensor['temp_offset'])
+    interval = int(sensor['interval'])
+    burn_in_time = float(sensor['burn_in_time'])
+
 except TypeError:
-    print("TypeError parsing config.ini file. Check datatypes!")
+    print("TypeError parsing config.ini file. Check boolean datatypes!")
     sys.exit()
 except KeyError:
     print("KeyError parsing config.ini file. Check file and its structure!")
     sys.exit()
-
+except ValueError:
+    print("ValueError parsing config.ini file. Check number datatypes!")
+    sys.exit()
 
 sensor = bme680.BME680()
 raspid = get_raspid()
-
-
-# Allow user to set session and runno via args otherwise auto-generate
-if len(sys.argv) > 1:
-    if (len(sys.argv) < 4):
-        print("Must define session (dev/prod), location and temp-offset!!")
-        sys.exit()
-    else:
-        session = sys.argv[1]
-        location = sys.argv[2]
-        temp_offset = float(sys.argv[3])
-else:
-    session = "dev"
-    location = "unknown"
-    temp_offset = 0
 
 now = datetime.datetime.now()
 runNo = now.strftime("%Y%m%d%H%M")
@@ -83,14 +86,10 @@ if enable_gas:
 else:
     sensor.set_gas_status(bme680.DISABLE_GAS_MEAS)
 
-# Sample period (s)
-interval = 5
-
 # start_time and curr_time ensure that the
 # burn_in_time (in seconds) is kept track of.
 start_time = time.time()
 curr_time = time.time()
-burn_in_time = 400
 burn_in_data = []
 
 # Run until keyboard out

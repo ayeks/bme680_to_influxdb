@@ -41,13 +41,13 @@ Go to the config.ini file and change the values to match your environment. You s
 
 ## Execution
 
-Simply call: `python3 senddata.py` to use the default values. If you want to define a session, location and temperature offset use: `python3 senddata.py "dev" "livingroom" -3.5`.
+Simply call: `python3 senddata.py "./config.ini" `.
 
 Often you want your Raspberry to execute the senddata script automatically after it started. Use the following to do so:
 ```
 # automated startup:
 sudo nano /etc/rc.local
-python3 /home/pi/senddata.py "dev" "livingroom" -3.5 &
+python3 /home/pi/senddata.py "/home/pi/config.ini" &
 ```
 
 
