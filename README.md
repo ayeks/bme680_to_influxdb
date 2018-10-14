@@ -28,15 +28,15 @@ CREATE DATABASE "logger"
 ```
 
 
-### Send data script
+### BME680_to_InfluxDB on a RaspberryPI
 
-You need the [bme680 python lib](https://github.com/pimoroni/bme680) and the InfluxDB client. In my case the bme680 temperature readings are 3.5 degrees celsius to low, therefore I wrote a [pull request](https://github.com/pimoroni/bme680/pull/13) to allow some offset calculation. Until the pull request is merged you should clone from my [bme680 repo](https://github.com/ayeks/bme680/tree/offset).
+You need the [bme680 python lib](https://github.com/pimoroni/bme680), the InfluxDB client and the bme680_to_influx script.
 ```
-sudo pip3 install influxdb
-git clone https://github.com/ayeks/bme680 -b offset
-cd bme680/library
-sudo python3 setup.py install
+pip3 install -r requirements.txt 
+git clone https://github.com/ayeks/bme680_to_influxdb
 ```
+
+Go to the config.ini file and change the values to match your environment. You should change at least `host`, `user` and the `password`.
 
 
 ## Execution

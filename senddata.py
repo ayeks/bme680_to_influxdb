@@ -5,7 +5,7 @@ import datetime  # for time and delay
 from influxdb import InfluxDBClient  # for collecting data
 import socket  # for hostname
 import bme680  # for sensor data
-
+import configparser # for parsing config.ini file
 
 def get_raspid():
     # Extract serial from cpuinfo file
@@ -16,20 +16,28 @@ def get_raspid():
                 cpuserial = line[10:26]
     return cpuserial
 
+# Parsing the config parameters from config.ini
+config = configparser.ConfigParser()
+try:
+    config.read('config.ini')
+    influxserver = config['influxserver']
+    host = influxserver.get('host')
+    port = influxserver.get('port')
+    user = influxserver.get('user')
+    password = influxserver.get('password')
+    dbname = influxserver.get('dbname')
+    enable_gas = config.getboolean('sensor', 'enable_gas')
+except TypeError:
+    print("TypeError parsing config.ini file. Check datatypes!")
+    sys.exit()
+except KeyError:
+    print("KeyError parsing config.ini file. Check file and its structure!")
+    sys.exit()
+
 
 sensor = bme680.BME680()
 raspid = get_raspid()
 
-# InfluxDB Configuration
-# Set this variables
-host = "192.168.178.54"
-port = 8086
-user = "root"
-password = "root"  # TODO: not so secure..
-enable_gas = True
-
-# The database we created
-dbname = "logger"
 
 # Allow user to set session and runno via args otherwise auto-generate
 if len(sys.argv) > 1:
