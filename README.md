@@ -68,7 +68,7 @@ select * from dev
 
 In this repo is the [JSON](./grafana_dashboard.json) included that generates the following Grafana Dashboard:
 
-![Grafana BME680 Dashboard](https://ayeks.de/assets/blog/2018-05-29-bme680-influxdb-grafana/grafana-complete-bme680.png)
+![Grafana BME680 Dashboard](https://ayeks.de/img/blog/2018-05-29-bme680-influxdb-grafana/grafana-complete-bme680.png)
 
 ## Credits
 
