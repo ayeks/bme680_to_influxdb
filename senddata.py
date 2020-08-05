@@ -126,7 +126,7 @@ try:
             temp = sensor.data.temperature
             press = sensor.data.pressure
 
-            iso = time.ctime()
+            iso = time.asctime(time.gmtime())
 
             if enable_gas:
 
