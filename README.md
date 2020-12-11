@@ -32,8 +32,9 @@ CREATE DATABASE "logger"
 
 You need the [bme680 python lib](https://github.com/pimoroni/bme680), the InfluxDB client and the bme680_to_influx script.
 ```
-pip3 install -r requirements.txt 
 git clone https://github.com/ayeks/bme680_to_influxdb
+cd bme680_to_influxdb
+pip3 install -r requirements.txt 
 ```
 
 Go to the config.ini file and change the values to match your environment. You should change at least `host`, `user` and the `password`.
