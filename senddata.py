@@ -53,7 +53,11 @@ except ValueError:
     print("ValueError parsing config.ini file. Check number datatypes!")
     sys.exit()
 
-sensor = bme680.BME680()
+try:
+    sensor = bme680.BME680(bme680.I2C_ADDR_PRIMARY)
+except IOError:
+    sensor = bme680.BME680(bme680.I2C_ADDR_SECONDARY)
+    
 raspid = get_raspid()
 
 now = datetime.datetime.now()
