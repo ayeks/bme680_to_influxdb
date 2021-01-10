@@ -211,7 +211,7 @@ try:
             
             # Try again up to five times
             attempt += 1
-            if attempt ==5:
+            if attempt == 5:
                 break
         # Wait for next sample
         time.sleep(interval)
