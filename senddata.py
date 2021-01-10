@@ -126,6 +126,9 @@ try:
     while True:
         if sensor.get_sensor_data():
 
+            # Reset the attempt var
+            attempt = 0
+            
             hum = sensor.data.humidity
             temp = sensor.data.temperature
             press = sensor.data.pressure
@@ -205,7 +208,11 @@ try:
             print(res)
         else:
             print("Error: .get_sensor_data() or heat_stable failed.")
-            break
+            
+            # Try again up to five times
+            attempt += 1
+            if attempt ==5:
+                break
         # Wait for next sample
         time.sleep(interval)
 
