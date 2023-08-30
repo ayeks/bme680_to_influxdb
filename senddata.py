@@ -5,7 +5,8 @@ import datetime  # for time and delay
 from influxdb import InfluxDBClient  # for collecting data
 import socket  # for hostname
 import bme680  # for sensor data
-import configparser # for parsing config.ini file
+import configparser  # for parsing config.ini file
+
 
 def get_raspid():
     # Extract serial from cpuinfo file
@@ -17,10 +18,9 @@ def get_raspid():
     return cpuserial
 
 
-
 # Allow user to set session and runno via args otherwise auto-generate
-if len(sys.argv) is 2:
-        configpath = sys.argv[1]
+if len(sys.argv) == 2:
+    configpath = sys.argv[1]
 else:
     print("ParameterError: You must define the path to the config.ini!")
     sys.exit()
@@ -55,9 +55,9 @@ except ValueError:
 
 try:
     sensor = bme680.BME680(bme680.I2C_ADDR_PRIMARY)
-except IOError:
+except:
     sensor = bme680.BME680(bme680.I2C_ADDR_SECONDARY)
-    
+
 raspid = get_raspid()
 
 now = datetime.datetime.now()
@@ -120,7 +120,8 @@ try:
         # calculation of air_quality_score (25:75, humidity:gas)
         hum_weighting = 0.25
 
-        print("Gas baseline: {0} Ohms, humidity baseline: {1:.2f} %RH\n".format(gas_baseline, hum_baseline))
+        print("Gas baseline: {0} Ohms, humidity baseline: {1:.2f} %RH\n".format(
+            gas_baseline, hum_baseline))
 
     # Sensor read loop
     while True:
@@ -128,7 +129,7 @@ try:
 
             # Reset the attempt var
             attempt = 0
-            
+
             hum = sensor.data.humidity
             temp = sensor.data.temperature
             press = sensor.data.pressure
@@ -143,14 +144,17 @@ try:
 
                 # Calculate hum_score as the distance from the hum_baseline.
                 if hum_offset > 0:
-                    hum_score = (100 - hum_baseline - hum_offset) / (100 - hum_baseline) * (hum_weighting * 100)
+                    hum_score = (100 - hum_baseline - hum_offset) / \
+                        (100 - hum_baseline) * (hum_weighting * 100)
 
                 else:
-                    hum_score = (hum_baseline + hum_offset) / hum_baseline * (hum_weighting * 100)
+                    hum_score = (hum_baseline + hum_offset) / \
+                        hum_baseline * (hum_weighting * 100)
 
                 # Calculate gas_score as the distance from the gas_baseline.
                 if gas_offset > 0:
-                    gas_score = (gas / gas_baseline) * (100 - (hum_weighting * 100))
+                    gas_score = (gas / gas_baseline) * \
+                        (100 - (hum_weighting * 100))
 
                 else:
                     gas_score = 100 - (hum_weighting * 100)
@@ -208,7 +212,7 @@ try:
             print(res)
         else:
             print("Error: .get_sensor_data() or heat_stable failed.")
-            
+
             # Try again up to five times
             attempt += 1
             if attempt == 5:
